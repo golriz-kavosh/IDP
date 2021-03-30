@@ -8,6 +8,7 @@
         <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..</DockerfileContext>
+        <Configurations>Debug;Release;Production</Configurations>
     </PropertyGroup>
 
     <ItemGroup>

@@ -84,7 +84,7 @@
       {
         "ClientId": "idp_console",
         "ClientName": "idp_console",
-        "ClientUri": "https://localhost:44303",
+        "ClientUri": "http://10.220.1.15:4048",
         "AllowedGrantTypes": [
           "authorization_code"
         ],
@@ -95,14 +95,14 @@
           }
         ],
         "RedirectUris": [
-          "https://localhost:44303/signin-oidc"
+          "http://10.220.1.15:4048/signin-oidc"
         ],
-        "FrontChannelLogoutUri": "https://localhost:44303/signout-oidc",
+        "FrontChannelLogoutUri": "http://10.220.1.15:4048/signout-oidc",
         "PostLogoutRedirectUris": [
-          "https://localhost:44303/signout-callback-oidc"
+          "http://10.220.1.15:4048/signout-callback-oidc"
         ],
         "AllowedCorsOrigins": [
-          "https://localhost:44303"
+          "http://10.220.1.15:4048"
         ],
         "AllowedScopes": [
           "openid",
@@ -120,13 +120,13 @@
         "RequireClientSecret": false,
         "RequirePkce": true,
         "RedirectUris": [
-          "https://localhost:44302/swagger/oauth2-redirect.html"
+          "http://10.220.1.15:4051/swagger/oauth2-redirect.html"
         ],
         "AllowedScopes": [
           "idp_console_api"
         ],
         "AllowedCorsOrigins": [
-          "https://localhost:44302"
+          "http://10.220.1.15:4051"
         ]
       }
     ]

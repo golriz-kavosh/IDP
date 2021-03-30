@@ -4,6 +4,7 @@
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<DebugType>Full</DebugType>
 		<IsPackable>false</IsPackable>
+		<Configurations>Debug;Release;Production</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>
