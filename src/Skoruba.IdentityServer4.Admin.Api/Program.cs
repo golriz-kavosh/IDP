@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +11,11 @@ namespace Skoruba.IdentityServer4.Admin.Api
 {
     public class Program
     {
+        private static readonly string BuildConfiguration = typeof(Program)
+            .Assembly
+            .GetCustomAttribute<AssemblyConfigurationAttribute>()?
+            .Configuration;
+        
         public static void Main(string[] args)
         {
             var configuration = GetConfiguration(args);
@@ -35,23 +41,23 @@ namespace Skoruba.IdentityServer4.Admin.Api
 
         private static IConfiguration GetConfiguration(string[] args)
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var isDevelopment = environment == Environments.Development;
-
             var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("serilog.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"serilog.{environment}.json", optional: true, reloadOnChange: true);
+                .SetBasePath(Directory.GetCurrentDirectory());
 
-            if (isDevelopment)
-            {
+            if (BuildConfiguration == "Debug")
+                configurationBuilder
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
+            else
+                configurationBuilder
+                    .AddJsonFile($"appsettings.{BuildConfiguration}.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"serilog.{BuildConfiguration}.json", optional: true, reloadOnChange: true);
+
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (environment == Environments.Development)
                 configurationBuilder.AddUserSecrets<Startup>();
-            }
 
             var configuration = configurationBuilder.Build();
-
             configuration.AddAzureKeyVaultConfiguration(configurationBuilder);
 
             configurationBuilder.AddCommandLine(args);
@@ -64,19 +70,19 @@ namespace Skoruba.IdentityServer4.Admin.Api
             Host.CreateDefaultBuilder(args)
                  .ConfigureAppConfiguration((hostContext, configApp) =>
                  {
-                     var configurationRoot = configApp.Build();
+                     if (BuildConfiguration == "Debug")
+                         configApp
+                             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                             .AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
+                     else
+                         configApp
+                             .AddJsonFile($"appsettings.{BuildConfiguration}.json", optional: false, reloadOnChange: true)
+                             .AddJsonFile($"serilog.{BuildConfiguration}.json", optional: true, reloadOnChange: true);
 
-                     configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
-
-                     var env = hostContext.HostingEnvironment;
-
-                     configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
-                     if (env.IsDevelopment())
-                     {
+                     if (hostContext.HostingEnvironment.IsDevelopment())
                          configApp.AddUserSecrets<Startup>();
-                     }
 
+                     var configurationRoot = configApp.Build();
                      configurationRoot.AddAzureKeyVaultConfiguration(configApp);
 
                      configApp.AddEnvironmentVariables();
