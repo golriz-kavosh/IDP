@@ -20,7 +20,7 @@
       {
         "Name": "MSSqlServer",
         "Args": {
-          "connectionString": "Data Source=10.220.1.11; Initial Catalog=IDP_debug; Persist Security Info=True; User ID=dbUser; Password=1234; MultipleActiveResultSets=true",
+          "connectionString": "Data Source=10.220.1.11; Initial Catalog=IDP; Persist Security Info=True; User ID=dbUser; Password=1234; MultipleActiveResultSets=true",
           "tableName": "Log",
           "columnOptionsSection": {
             "addStandardColumns": [ "LogEvent" ],

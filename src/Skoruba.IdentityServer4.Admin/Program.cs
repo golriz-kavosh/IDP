@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.KeyVault;
@@ -21,6 +22,10 @@ namespace Skoruba.IdentityServer4.Admin
     public class Program
     {
         private const string SeedArgs = "/seed";
+        private static readonly string BuildConfiguration = typeof(Program)
+            .Assembly
+            .GetCustomAttribute<AssemblyConfigurationAttribute>()?
+            .Configuration;
 
         public static async Task Main(string[] args)
         {
@@ -68,20 +73,25 @@ namespace Skoruba.IdentityServer4.Admin
 
         private static IConfiguration GetConfiguration(string[] args)
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var isDevelopment = environment == Environments.Development;
-
             var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("serilog.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"serilog.{environment}.json", optional: true, reloadOnChange: true);
+                .SetBasePath(Directory.GetCurrentDirectory());
 
-            if (isDevelopment)
-            {
+            if (BuildConfiguration == "Debug")
+                configurationBuilder
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).AddJsonFile("serilog.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile("serilog.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile("identitydata.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
+            else
+                configurationBuilder
+                    .AddJsonFile($"appsettings.{BuildConfiguration}.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"serilog.{BuildConfiguration}.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"identitydata.{BuildConfiguration}.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"identityserverdata.{BuildConfiguration}.json", optional: true, reloadOnChange: true);
+
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (environment == Environments.Development)
                 configurationBuilder.AddUserSecrets<Startup>();
-            }
 
             var configuration = configurationBuilder.Build();
 
@@ -97,23 +107,23 @@ namespace Skoruba.IdentityServer4.Admin
             Host.CreateDefaultBuilder(args)
                  .ConfigureAppConfiguration((hostContext, configApp) =>
                  {
-                     var configurationRoot = configApp.Build();
+                     if (BuildConfiguration == "Debug")
+                         configApp
+                             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).AddJsonFile("serilog.json", optional: true, reloadOnChange: true)
+                             .AddJsonFile("serilog.json", optional: true, reloadOnChange: true)
+                             .AddJsonFile("identitydata.json", optional: true, reloadOnChange: true)
+                             .AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
+                     else
+                         configApp
+                             .AddJsonFile($"appsettings.{BuildConfiguration}.json", optional: false, reloadOnChange: true)
+                             .AddJsonFile($"serilog.{BuildConfiguration}.json", optional: true, reloadOnChange: true)
+                             .AddJsonFile($"identitydata.{BuildConfiguration}.json", optional: true, reloadOnChange: true)
+                             .AddJsonFile($"identityserverdata.{BuildConfiguration}.json", optional: true, reloadOnChange: true);
 
-                     configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
-                     configApp.AddJsonFile("identitydata.json", optional: true, reloadOnChange: true);
-                     configApp.AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
-
-                     var env = hostContext.HostingEnvironment;
-
-                     configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-                     configApp.AddJsonFile($"identitydata.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-                     configApp.AddJsonFile($"identityserverdata.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
-                     if (env.IsDevelopment())
-                     {
+                     if (hostContext.HostingEnvironment.IsDevelopment())
                          configApp.AddUserSecrets<Startup>();
-                     }
 
+                     var configurationRoot = configApp.Build();
                      configurationRoot.AddAzureKeyVaultConfiguration(configApp);
 
                      configApp.AddEnvironmentVariables();
