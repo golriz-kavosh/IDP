@@ -13,14 +13,14 @@
       {
         "Name": "File",
         "Args": {
-          "path": "Log\\skoruba_admin.txt",
+          "path": "Log\\idp_admin.txt",
           "rollingInterval": "Day"
         }
       },
       {
         "Name": "MSSqlServer",
         "Args": {
-          "connectionString": "Server=(localdb)\\mssqllocaldb;Database=IdentityServer4Admin;Trusted_Connection=True;MultipleActiveResultSets=true",
+          "connectionString": "Data Source=10.220.1.11; Initial Catalog=IDP; Persist Security Info=True; User ID=dbUser; Password=1234; MultipleActiveResultSets=true",
           "tableName": "Log",
           "columnOptionsSection": {
             "addStandardColumns": [ "LogEvent" ],

@@ -63,8 +63,8 @@
     ],
     "ApiScopes": [
       {
-        "Name": "skoruba_identity_admin_api",
-        "DisplayName": "skoruba_identity_admin_api",
+        "Name": "idp_console_api",
+        "DisplayName": "idp_console_api",
         "Required": true,
         "UserClaims": [
           "role",
@@ -74,16 +74,16 @@
     ],
     "ApiResources": [
       {
-        "Name": "skoruba_identity_admin_api",
+        "Name": "idp_console_api",
         "Scopes": [
-          "skoruba_identity_admin_api"
+          "idp_console_api"
         ]
       }
     ],
     "Clients": [
       {
-        "ClientId": "skoruba_identity_admin",
-        "ClientName": "skoruba_identity_admin",
+        "ClientId": "idp_console",
+        "ClientName": "idp_console",
         "ClientUri": "https://localhost:44303",
         "AllowedGrantTypes": [
           "authorization_code"
@@ -91,7 +91,7 @@
         "RequirePkce": true,
         "ClientSecrets": [
           {
-            "Value": "skoruba_admin_client_secret"
+            "Value": "idp_console_secret_key_Lgi7lQoi"
           }
         ],
         "RedirectUris": [
@@ -112,8 +112,8 @@
         ]
       },
       {
-        "ClientId": "skoruba_identity_admin_api_swaggerui",
-        "ClientName": "skoruba_identity_admin_api_swaggerui",
+        "ClientId": "idp_console_api_swaggerui",
+        "ClientName": "idp_console_api_swaggerui",
         "AllowedGrantTypes": [
           "authorization_code"
         ],
@@ -123,7 +123,7 @@
           "https://localhost:44302/swagger/oauth2-redirect.html"
         ],
         "AllowedScopes": [
-          "skoruba_identity_admin_api"
+          "idp_console_api"
         ],
         "AllowedCorsOrigins": [
           "https://localhost:44302"

@@ -2,16 +2,16 @@
   "IdentityData": {
     "Roles": [
       {
-        "Name": "SkorubaIdentityAdminAdministrator"
+        "Name": "GodAdmin"
       }
     ],
     "Users": [
       {
         "Username": "admin",
-        "Password": "Pa$$word123",
-        "Email": "admin@skoruba.com",
+        "Password": "P@ssw0rd",
+        "Email": "hessam8008@yahoo.com",
         "Roles": [
-          "SkorubaIdentityAdminAdministrator"
+          "GodAdmin"
         ],
         "Claims": [
           {
