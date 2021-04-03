@@ -7,6 +7,7 @@
 @{
     ViewBag.Title = Localizer["PageTitle"];
     Layout = "_Layout";
+    var row = 1;
 }
 
 <div class="row">
@@ -17,6 +18,7 @@
 
 
 <div class="col-12">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div asp-validation-summary="All" class="text-danger"></div>
 </div>
 
@@ -39,19 +41,27 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="deleteLogsModal" tabindex="-1" role="dialog" aria-labelledby="deleteLogsModal">
+    <div class="modal fade" id="deleteLogsModal" tabindex="-1" role="dialog"
+         aria-labelledby="deleteLogsModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="deletePersistedGrantsModalLabel">@Localizer["DeleteDialogTitle"]</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="deletePersistedGrantsModalLabel">
+                        @Localizer["DeleteDialogTitle"]
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     @Localizer["DeleteDialogMessage"]
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger">@Localizer["DeleteDialogYes"]</button>
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">@Localizer["DeleteDialogNo"]</button>
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">
+                        @Localizer["DeleteDialogNo"]
+                    </button>
                 </div>
             </div>
         </div>
@@ -67,30 +77,38 @@
 <div class="row">
     <div class="col-12">
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>@Localizer["TableLevel"]</th>
-                        <th>@Localizer["TableLogged"]</th>
-                        <th>@Localizer["TableMessage"]</th>
+                        <th>#</th>
+                        <th style="width: 5%" class="text-center">@Localizer["TableLevel"]</th>
+                        <th style="width: 15%" class="text-center">@Localizer["TableLogged"]</th>
+                        <th style="width: auto" class="text-center">@Localizer["TableMessage"]</th>
+                        <th style="width: 10%" class="text-center"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var log in Model.Logs)
                     {
                         <tr>
-                            <td><a href="#" data-error-id="@log.Id" class="btn btn-primary btn-error-detail">@Localizer["TableShowDetail"]</a></td>
-                            <td>@log.Level</td>
-                            <td>
-                                <span class="local-datetime" title="@log.TimeStamp" data-utc="@log.TimeStamp.GetEpochTicks()" data-toggle="tooltip" data-placement="top">
+                            <th>@(row++)</th>
+                            <td class="text-center">@log.Level</td>
+                            <td class="text-center">
+                                <span class="local-datetime" title="@log.TimeStamp"
+                                      data-utc="@log.TimeStamp.GetEpochTicks()"
+                                      data-toggle="tooltip" data-placement="top">
                                     @log.TimeStamp
                                 </span>
-                                <span class="oi oi-clock" title="@log.TimeStamp" data-toggle="tooltip" data-placement="top"></span>
+                                <span class="oi oi-clock" title="@log.TimeStamp" data-toggle="tooltip"
+                                      data-placement="top"></span>
                             </td>
-                            <td>@log.Message</td>
+                            <td style="direction: ltr; text-align: left; word-break: break-all">@log.Message</td>
+                            <td class="text-center">
+                                <a href="#" data-error-id="@log.Id" class="btn btn-primary btn-error-detail">@Localizer["TableShowDetail"]</a>
+                            </td>
                         </tr>
-                        <tr class="row-error-detail d-none" data-error-id="@log.Id">
+                        <tr class="row-error-detail d-none" style="direction: ltr; text-align: left; word-break: break-all;"
+                            data-error-id="@log.Id">
                             <td colspan="4" data-error-json="@log.LogEvent"></td>
                         </tr>
                     }
@@ -102,6 +120,13 @@
 
 <div class="row">
     <div class="col-12">
-        @await Html.PartialAsync("Common/Pager", new Pager { Action = "ErrorsLog", PageSize = Model.PageSize, TotalCount = Model.TotalCount, EnableSearch = true, Search = ViewBag.Search })
+        @await Html.PartialAsync("Common/Pager", new Pager
+        {
+            Action = "ErrorsLog",
+            PageSize = Model.PageSize,
+            TotalCount = Model.TotalCount,
+            EnableSearch = true,
+            Search = ViewBag.Search
+        })
     </div>
 </div>
