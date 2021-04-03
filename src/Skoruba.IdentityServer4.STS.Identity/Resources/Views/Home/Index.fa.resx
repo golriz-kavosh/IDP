@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="2FA" xml:space="preserve">
-    <value>احراز هویت دو-عاملی</value>
+    <value>احراز هویت دو مرحله ای</value>
   </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>تغییر کلمه عبور</value>
@@ -127,7 +127,7 @@
     <value>سند کشف</value>
   </data>
   <data name="Grants" xml:space="preserve">
-    <value>واگذاری های اصرارشده</value>
+    <value>دسترسی های واگذار شده</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>ورود</value>
