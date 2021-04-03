@@ -121,7 +121,7 @@
     <value>حذف همه</value>
   </data>
   <data name="DeleteDialogMessage" xml:space="preserve">
-    <value>آیا مطمئن هستید؟ تمام واگذاری های اصرار شده برای این subject حذف خواهد شد.</value>
+    <value>آیا مطمئن هستید؟ تمام دسترسی های واگذار شده برای این کاربر حذف خواهد شد.</value>
   </data>
   <data name="DeleteDialogNo" xml:space="preserve">
     <value>خیر - بستن</value>
@@ -133,34 +133,34 @@
     <value>بله - حذف</value>
   </data>
   <data name="NavigationPersistedGrants" xml:space="preserve">
-    <value>واگذاری های اصرار شده</value>
+    <value>دسترسی های واگذار شده</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
-    <value>واگذاری اصرار شده</value>
+    <value>دسترسی واگذار شده</value>
   </data>
   <data name="TableClient" xml:space="preserve">
     <value>کاربر</value>
   </data>
   <data name="TableConsumedTime" xml:space="preserve">
-    <value>Consumed Time</value>
+    <value>زمان مصرف شده</value>
   </data>
   <data name="TableCreationTime" xml:space="preserve">
-    <value>Creation Time</value>
+    <value>زمان ایجاد</value>
   </data>
   <data name="TableData" xml:space="preserve">
     <value>داده</value>
   </data>
   <data name="TableDescription" xml:space="preserve">
-    <value>Description</value>
+    <value>توضیحات</value>
   </data>
   <data name="TableExpiration" xml:space="preserve">
     <value>انقضاء</value>
   </data>
   <data name="TableSessionId" xml:space="preserve">
-    <value>SessionId</value>
+    <value>آی دی نشست</value>
   </data>
   <data name="TableSubjectId" xml:space="preserve">
-    <value>Subject شناسه</value>
+    <value>شناسه کاربر</value>
   </data>
   <data name="TableType" xml:space="preserve">
     <value>نوع</value>
