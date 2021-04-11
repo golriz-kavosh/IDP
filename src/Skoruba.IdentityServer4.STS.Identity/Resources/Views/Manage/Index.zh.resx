@@ -159,4 +159,7 @@
   <data name="Website" xml:space="preserve">
     <value>网站 URL</value>
   </data>
+  <data name="SendVerificationPhoneNumber" xml:space="preserve">
+    <value>Send Verification Code</value>
+  </data>
 </root>

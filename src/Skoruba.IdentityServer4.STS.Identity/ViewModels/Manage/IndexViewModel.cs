@@ -7,6 +7,7 @@ namespace Skoruba.IdentityServer4.STS.Identity.ViewModels.Manage
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
+        public bool IsPhoneNumberConfirmed { get; set; }
 
         [Required]
         [EmailAddress]
