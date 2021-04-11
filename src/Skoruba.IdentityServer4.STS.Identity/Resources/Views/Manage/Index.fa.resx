@@ -147,6 +147,9 @@
   <data name="SendVerificationEmail" xml:space="preserve">
     <value>ارسال ایمیل تایید</value>
   </data>
+  <data name="SendVerificationPhoneNumber" xml:space="preserve">
+    <value>ارسال کد تایید</value>
+  </data>
   <data name="StreetAddress" xml:space="preserve">
     <value>آدرس خیایان</value>
   </data>
