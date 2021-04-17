@@ -5,8 +5,8 @@ namespace Skoruba.IdentityServer4.STS.Identity.Helpers.TagHelpers
     [HtmlTargetElement("img-gravatar")]
     public class GravatarTagHelper : TagHelper
     {
-        [HtmlAttributeName("email")]
-        public string Email { get; set; }
+        [HtmlAttributeName("userId")]
+        public string UserId { get; set; }
 
         [HtmlAttributeName("alt")]
         public string Alt { get; set; }
@@ -19,10 +19,8 @@ namespace Skoruba.IdentityServer4.STS.Identity.Helpers.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (!string.IsNullOrWhiteSpace(Email))
+            if (!string.IsNullOrWhiteSpace(UserId))
             {
-                var hash = Md5HashHelper.GetHash(Email);
-
                 output.TagName = "img";
                 if (!string.IsNullOrWhiteSpace(Class))
                 {
@@ -34,16 +32,16 @@ namespace Skoruba.IdentityServer4.STS.Identity.Helpers.TagHelpers
                     output.Attributes.Add("alt", Alt);
                 }
                 
-                output.Attributes.Add("src", GetAvatarUrl(hash, Size));
+                output.Attributes.Add("src", GetAvatarUrl(UserId, Size));
                 output.TagMode = TagMode.SelfClosing;
             } 
         }
 
-        private static string GetAvatarUrl(string hash, int size)
+        private static string GetAvatarUrl(string key, int size)
         {
             var sizeArg = size > 0 ? $"?s={size}" : "";
 
-            return $"https://www.gravatar.com/avatar/{hash}{sizeArg}";
+            return $"http://gravatar.dev.api/av/{key}{sizeArg}";
         }
     }
 }

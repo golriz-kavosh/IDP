@@ -200,7 +200,7 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
 
             if (!TempData.ContainsKey("PhoneVerificationTokenTd"))
                 return NotFound();
-            
+
             var td = TempData["PhoneVerificationTokenTd"].ToString()!;
             var tempDataModel = JsonConvert.DeserializeObject<PhoneTokenTempDataModel>(td);
 
@@ -789,6 +789,7 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
 
             var model = new IndexViewModel
             {
+                Id = user.Id.ToString(),
                 Username = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
