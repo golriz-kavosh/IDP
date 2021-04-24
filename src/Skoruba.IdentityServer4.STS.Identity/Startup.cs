@@ -57,7 +57,8 @@ namespace Skoruba.IdentityServer4.STS.Identity
 
             services.AddTransient<ISmsSender, SmsSender>();
             services.Configure<SmsOptions>(Configuration.GetSection(nameof(SmsOptions)));
-            
+            services.Configure<AvatarOptions>(Configuration.GetSection(nameof(AvatarOptions)));
+
             services.AddIdSHealthChecks<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminIdentityDbContext, IdentityServerDataProtectionDbContext>(Configuration);
         }
 

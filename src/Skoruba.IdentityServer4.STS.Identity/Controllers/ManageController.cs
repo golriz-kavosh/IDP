@@ -33,6 +33,7 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
         private readonly UrlEncoder _urlEncoder;
         private readonly ISmsSender _smsSender;
         private readonly SmsOptions _smsOptions;
+        private readonly AvatarOptions _avatarOptions;
 
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
@@ -42,8 +43,8 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
 
         public ManageController(UserManager<TUser> userManager, SignInManager<TUser> signInManager,
             IEmailSender emailSender, ILogger<ManageController<TUser, TKey>> logger,
-            IGenericControllerLocalizer<ManageController<TUser, TKey>> localizer,
-            UrlEncoder urlEncoder, ISmsSender smsSender, IOptions<SmsOptions> smsOptions)
+            IGenericControllerLocalizer<ManageController<TUser, TKey>> localizer, UrlEncoder urlEncoder,
+            ISmsSender smsSender, IOptions<SmsOptions> smsOptions, IOptions<AvatarOptions> avatarOptions)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -53,6 +54,7 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
             _urlEncoder = urlEncoder;
             _smsSender = smsSender;
             _smsOptions = smsOptions.Value;
+            _avatarOptions = avatarOptions.Value;
         }
 
         [HttpGet]
@@ -803,7 +805,8 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
                 Region = profile.Region,
                 PostalCode = profile.PostalCode,
                 Locality = profile.Locality,
-                StreetAddress = profile.StreetAddress
+                StreetAddress = profile.StreetAddress,
+                AvatarOptions = _avatarOptions
             };
             return model;
         }

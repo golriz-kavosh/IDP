@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Skoruba.IdentityServer4.STS.Identity.Configuration;
 
 namespace Skoruba.IdentityServer4.STS.Identity.ViewModels.Manage
 {
@@ -51,5 +52,7 @@ namespace Skoruba.IdentityServer4.STS.Identity.ViewModels.Manage
         [MaxLength(255)]
         [Display(Name = "Country")]
         public string Country { get; set; }
+
+        public AvatarOptions AvatarOptions { get; set; }
     }
 }
