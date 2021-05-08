@@ -7,13 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.Entities.Identity;
-using Skoruba.IdentityServer4.Shared.Helpers;
 using Skoruba.IdentityServer4.STS.Identity.Configuration;
 using Skoruba.IdentityServer4.STS.Identity.Configuration.Constants;
 using Skoruba.IdentityServer4.STS.Identity.Configuration.Interfaces;
 using Skoruba.IdentityServer4.STS.Identity.Helpers;
 using Skoruba.IdentityServer4.STS.Identity.Services.SmsService;
 using System;
+using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
 
 namespace Skoruba.IdentityServer4.STS.Identity
 {
