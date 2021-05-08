@@ -121,10 +121,10 @@
     <value>Api منابع</value>
   </data>
   <data name="ButtonApiScopes" xml:space="preserve">
-    <value>Api Scopes</value>
+    <value>Api های دامنه</value>
   </data>
   <data name="ButtonAuditLogs" xml:space="preserve">
-    <value>Audit Logs</value>
+    <value>عملکرد کاربران</value>
   </data>
   <data name="ButtonClients" xml:space="preserve">
     <value>سرویس گیرنده ها</value>
@@ -136,7 +136,7 @@
     <value>مدیریت</value>
   </data>
   <data name="ButtonPersistedGrants" xml:space="preserve">
-    <value>واگذاری های اصرار شده</value>
+    <value>دسترسی های واگذار شده</value>
   </data>
   <data name="ButtonRoles" xml:space="preserve">
     <value>نقش ها</value>
@@ -145,6 +145,6 @@
     <value>کاربران</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
-    <value>ادمین برای IdentityServer4 و Asp.Net Core Identity</value>
+    <value>داشبورد مدیریت</value>
   </data>
 </root>

@@ -1,12 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Skoruba.IdentityServer4.STS.Identity.Configuration;
 
 namespace Skoruba.IdentityServer4.STS.Identity.ViewModels.Manage
 {
     public class IndexViewModel
     {
+        public string Id { get; set; }
+
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
+        public bool IsPhoneNumberConfirmed { get; set; }
 
         [Required]
         [EmailAddress]
@@ -48,5 +52,7 @@ namespace Skoruba.IdentityServer4.STS.Identity.ViewModels.Manage
         [MaxLength(255)]
         [Display(Name = "Country")]
         public string Country { get; set; }
+
+        public AvatarOptions AvatarOptions { get; set; }
     }
 }

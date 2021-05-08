@@ -5,13 +5,17 @@
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["Audit Log"];
+    var row = 1;
 }
 
 <div class="audit-log-container">
 
     <div class="row">
         <div class="col-12 mb-3 text-center mt-1">
-            <h2><span class="oi oi-eye" title="Audit Logging" aria-hidden="true"></span> @ViewData["Title"]</h2>
+            <h2>
+                <span class="oi oi-eye" title="Audit Logging" aria-hidden="true"></span>
+                @ViewData["Title"]
+            </h2>
         </div>
     </div>
 
@@ -89,31 +93,53 @@
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-sm">
                     <thead>
                         <tr>
+                            <th>#</th>
+                            <th scope="col" class="text-center">@Localizer["Event"]</th>
+                            <th scope="col" class="text-center">@Localizer["Source"]</th>
+                            <th scope="col" class="text-center">@Localizer["Subject"]</th>
+                            <th scope="col" class="text-center">@Localizer["Action"]</th>
+                            <th scope="col" class="text-center">@Localizer["Created"]</th>
                             <th></th>
-                            <th>@Localizer["Event"]</th>
-                            <th>@Localizer["Source"]</th>
-                            <th>@Localizer["Subject"]</th>
-                            <th>@Localizer["Action"]</th>
-                            <th>@Localizer["Created"]</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var auditLog in Model.Logs)
                         {
                             <tr>
-                                <td><a href="#" data-error-id="@auditLog.Id" class="btn btn-primary btn-error-detail">@Localizer["Detail"]</a></td>
-                                <td>@auditLog.Event</td>
-                                <td>@auditLog.Source</td>
-                                <td><button class="audit-subject-button btn btn-outline-primary" data-subject-name="@auditLog.SubjectName" data-subject-identifier="@auditLog.SubjectIdentifier" data-subject-type="@auditLog.SubjectType" data-subject-additional-data="@auditLog.SubjectAdditionalData">@auditLog.SubjectName - @Localizer["Show detail"] <i class="fa fa-eye"></i></button></td>
-                                <td><button class="audit-action-button btn btn-outline-primary" data-action-title="@Localizer["Action"]" data-action="@auditLog.Action">@Localizer["Show detail"] <i class="fa fa-eye"></i></button></td>
-                                <td>
+                                <th>@(row++)</th>
+                                <td class="text-center">@auditLog.Event</td>
+                                <td class="text-center">@auditLog.Source</td>
+                                <td class="text-center">
+                                    <button class="audit-subject-button btn btn-outline-primary"
+                                            data-subject-name="@auditLog.SubjectName"
+                                            data-subject-identifier="@auditLog.SubjectIdentifier"
+                                            data-subject-type="@auditLog.SubjectType"
+                                            data-subject-additional-data="@auditLog.SubjectAdditionalData">
+                                        @auditLog.SubjectName - @Localizer["Show detail"] <i class="fa fa-eye"></i>
+                                    </button>
+                                </td>
+                                <td class="text-center">
+                                    <button class="audit-action-button btn btn-outline-primary"
+                                            data-action-title="@Localizer["Action"]"
+                                            data-action="@auditLog.Action">
+                                        @Localizer["Show detail"] <i class="fa fa-eye"></i>
+                                    </button>
+                                </td>
+                                <td class="text-center">
                                     @auditLog.Created
                                 </td>
+                                <td class="text-center">
+                                    <a href="#" data-error-id="@auditLog.Id"
+                                       class="btn btn-primary btn-error-detail">
+                                        @Localizer["Detail"]
+                                    </a>
+                                </td>
                             </tr>
-                            <tr class="row-error-detail d-none" data-error-id="@auditLog.Id">
+                            <tr class="row-error-detail d-none" data-error-id="@auditLog.Id"
+                                style="direction: ltr; text-align: left;">
                                 <td colspan="6" data-error-json="@auditLog.Data"></td>
                             </tr>
                         }
@@ -138,7 +164,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="direction: ltr; text-align: left">
                     <div class="audit-modal-value"></div>
                 </div>
             </div>

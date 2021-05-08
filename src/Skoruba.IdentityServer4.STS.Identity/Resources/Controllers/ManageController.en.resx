@@ -129,6 +129,10 @@
   <data name="ConfirmEmailTitle" xml:space="preserve">
     <value>Confirm your email</value>
   </data>
+  <data name="ConfirmPhoneNumberMessage" xml:space="preserve">
+    <value>Code: {0}
+Kavosh</value>
+  </data>
   <data name="DeletePersonalData" xml:space="preserve">
     <value>User with ID '{0}' deleted themselves.</value>
   </data>
@@ -158,6 +162,9 @@
   </data>
   <data name="ErrorSettingPhone" xml:space="preserve">
     <value>Unexpected error occurred setting phone number for user with ID {0}.</value>
+  </data>
+  <data name="ExpirePhoneNumberTokenErrorMessage" xml:space="preserve">
+    <value>The submitted code has expired, please get a new code.</value>
   </data>
   <data name="ExternalLoginAdded" xml:space="preserve">
     <value>The external login was added.</value>
@@ -203,5 +210,8 @@
   </data>
   <data name="VerificationSent" xml:space="preserve">
     <value>Verification email sent. Please check your email.</value>
+  </data>
+  <data name="WrongPhoneNumberTokenErrorMessage" xml:space="preserve">
+    <value>The submitted code is wrong.</value>
   </data>
 </root>

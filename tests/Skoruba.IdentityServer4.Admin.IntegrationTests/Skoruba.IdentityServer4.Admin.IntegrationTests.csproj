@@ -5,6 +5,7 @@
 		<PreserveCompilationContext>true</PreserveCompilationContext>
 		<IsPackable>false</IsPackable>
 		<DebugType>Full</DebugType>
+		<Configurations>Debug;Release;Production</Configurations>
 	</PropertyGroup>
 
     <ItemGroup>

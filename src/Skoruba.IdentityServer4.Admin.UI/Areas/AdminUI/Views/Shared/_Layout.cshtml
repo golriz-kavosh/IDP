@@ -3,6 +3,10 @@
 @using Skoruba.IdentityServer4.Admin.UI.Configuration
 @using Skoruba.IdentityServer4.Admin.UI.Configuration.Constants
 @inject IViewLocalizer Localizer
+@{
+    var isRightToLeft = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft;
+    var langStyle = isRightToLeft ? "direction: rtl; text-align: right" : "direction: ltr; text-align: left";
+}
 @inject AdminConfiguration AdminConfiguration
 
 <!DOCTYPE html>
@@ -95,7 +99,7 @@
         </a>
     </div>
 
-    <div class="container">
+    <div class="container" style="@langStyle">
         @RenderBody()
 
         <footer class="pt-4 my-md-5 pt-md-5 border-top">

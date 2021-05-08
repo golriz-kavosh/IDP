@@ -1,24 +1,27 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Skoruba.IdentityServer4.STS.Identity.Configuration;
 using Skoruba.IdentityServer4.STS.Identity.Helpers;
 using Skoruba.IdentityServer4.STS.Identity.Helpers.Localization;
+using Skoruba.IdentityServer4.STS.Identity.Services.SmsService;
 using Skoruba.IdentityServer4.STS.Identity.ViewModels.Manage;
+using System;
+using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace Skoruba.IdentityServer4.STS.Identity.Controllers
-{    
+{
     [Authorize]
-    public class ManageController<TUser, TKey> : Controller
+    public class ManageController<TUser, TKey>: Controller
         where TUser : IdentityUser<TKey>, new()
         where TKey : IEquatable<TKey>
     {
@@ -28,6 +31,9 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
         private readonly ILogger<ManageController<TUser, TKey>> _logger;
         private readonly IGenericControllerLocalizer<ManageController<TUser, TKey>> _localizer;
         private readonly UrlEncoder _urlEncoder;
+        private readonly ISmsSender _smsSender;
+        private readonly SmsOptions _smsOptions;
+        private readonly AvatarOptions _avatarOptions;
 
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
@@ -35,7 +41,10 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
         [TempData]
         public string StatusMessage { get; set; }
 
-        public ManageController(UserManager<TUser> userManager, SignInManager<TUser> signInManager, IEmailSender emailSender, ILogger<ManageController<TUser, TKey>> logger, IGenericControllerLocalizer<ManageController<TUser, TKey>> localizer, UrlEncoder urlEncoder)
+        public ManageController(UserManager<TUser> userManager, SignInManager<TUser> signInManager,
+            IEmailSender emailSender, ILogger<ManageController<TUser, TKey>> logger,
+            IGenericControllerLocalizer<ManageController<TUser, TKey>> localizer, UrlEncoder urlEncoder,
+            ISmsSender smsSender, IOptions<SmsOptions> smsOptions, IOptions<AvatarOptions> avatarOptions)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -43,6 +52,9 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
             _logger = logger;
             _localizer = localizer;
             _urlEncoder = urlEncoder;
+            _smsSender = smsSender;
+            _smsOptions = smsOptions.Value;
+            _avatarOptions = avatarOptions.Value;
         }
 
         [HttpGet]
@@ -59,7 +71,7 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
 
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(IndexViewModel model)
@@ -94,21 +106,26 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
                     throw new ApplicationException(_localizer["ErrorSettingPhone", user.Id]);
                 }
             }
-            
+
             await UpdateUserClaimsAsync(model, user);
 
             StatusMessage = _localizer["ProfileUpdated"];
 
             return RedirectToAction(nameof(Index));
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                var errors = ModelState
+                    .Select(x => x.Value.Errors)
+                    .Last(y => y.Count > 0)
+                    .First();
+                model.StatusMessage = errors.ErrorMessage;
+                return RedirectToAction(nameof(Index), model);
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -128,6 +145,148 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
             StatusMessage = _localizer["VerificationSent"];
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendVerificationPhoneNumber(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Select(x => x.Value.Errors)
+                    .Last(y => y.Count > 0)
+                    .First();
+                model.StatusMessage = errors.ErrorMessage;
+                return RedirectToAction(nameof(Index), model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return NotFound(_localizer["UserNotFound", _userManager.GetUserId(User)]);
+
+            var isCanSendNewCode = true;
+            if (TempData.ContainsKey("PhoneVerificationTokenTd"))
+            {
+                var td = TempData["PhoneVerificationTokenTd"].ToString()!;
+                var tdModel = JsonConvert.DeserializeObject<PhoneTokenTempDataModel>(td);
+                if (tdModel.SendNextSmsTime >= DateTime.Now)
+                    isCanSendNewCode = false;
+
+                TempData.Keep("PhoneVerificationTokenTd");
+            }
+
+            if (isCanSendNewCode)
+            {
+                var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
+                TempData["PhoneVerificationTokenTd"] = JsonConvert.SerializeObject(new PhoneTokenTempDataModel
+                {
+                    SecretKey = Guid.NewGuid().ToString(),
+                    PhoneNumber = model.PhoneNumber,
+                    SendNextSmsTime = DateTime.Now.AddSeconds(_smsOptions.SendSmsDelay)
+                });
+
+                var message = string.Format(_localizer["ConfirmPhoneNumberMessage"], code);
+                await _smsSender.SendSmsAsync(model.PhoneNumber, message);
+            }
+
+            return RedirectToAction(nameof(VerificationPhoneNumber));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> VerificationPhoneNumber()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+                return NotFound(_localizer["UserNotFound", _userManager.GetUserId(User)]);
+
+            if (!TempData.ContainsKey("PhoneVerificationTokenTd"))
+                return NotFound();
+
+            var td = TempData["PhoneVerificationTokenTd"].ToString()!;
+            var tempDataModel = JsonConvert.DeserializeObject<PhoneTokenTempDataModel>(td);
+
+            TempData.Keep("PhoneVerificationTokenTd");
+            return View(new VerificationPhoneNumberViewModel
+            {
+                PhoneNumber = user.PhoneNumber,
+                Interval = (int)(tempDataModel.SendNextSmsTime - DateTime.Now).TotalSeconds
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerificationPhoneNumber(VerificationPhoneNumberViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+                return NotFound(_localizer["UserNotFound", _userManager.GetUserId(User)]);
+
+            if (!TempData.ContainsKey("PhoneVerificationTokenTd"))
+                return NotFound();
+
+            var td = TempData["PhoneVerificationTokenTd"].ToString()!;
+            var tdModel = JsonConvert.DeserializeObject<PhoneTokenTempDataModel>(td);
+            var sec = (int)(tdModel.SendNextSmsTime - DateTime.Now).TotalSeconds;
+
+            if (ModelState.IsValid)
+            {
+                var result =
+                    await _userManager.VerifyChangePhoneNumberTokenAsync(user, model.Token, model.PhoneNumber);
+                if (result)
+                {
+                    user.PhoneNumberConfirmed = true;
+                    await _userManager.UpdateAsync(user);
+
+                    TempData.Remove("PhoneVerificationTokenTd");
+                    return RedirectToAction(nameof(Index));
+                }
+
+                model.StatusMessage = sec > 0
+                    ? _localizer["WrongPhoneNumberTokenErrorMessage"]
+                    : _localizer["ExpirePhoneNumberTokenErrorMessage"];
+
+                TempData.Keep("PhoneVerificationTokenTd");
+            }
+
+            model.Interval = sec;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendAgainVerificationPhoneNumber(VerificationPhoneNumberViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return NotFound(_localizer["UserNotFound", _userManager.GetUserId(User)]);
+
+            var isCanSendNewCode = true;
+            if (TempData.ContainsKey("PhoneVerificationTokenTd"))
+            {
+                var td = TempData["PhoneVerificationTokenTd"].ToString()!;
+                var tdModel = JsonConvert.DeserializeObject<PhoneTokenTempDataModel>(td);
+                if (tdModel.SendNextSmsTime >= DateTime.Now)
+                    isCanSendNewCode = false;
+
+                TempData.Keep("PhoneVerificationTokenTd");
+            }
+
+            if (isCanSendNewCode)
+            {
+                var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
+                TempData["PhoneVerificationTokenTd"] = JsonConvert.SerializeObject(new PhoneTokenTempDataModel
+                {
+                    SecretKey = Guid.NewGuid().ToString(),
+                    PhoneNumber = model.PhoneNumber,
+                    SendNextSmsTime = DateTime.Now.AddSeconds(_smsOptions.SendSmsDelay)
+                });
+
+                var message = string.Format(_localizer["ConfirmPhoneNumberMessage"], code);
+                await _smsSender.SendSmsAsync(model.PhoneNumber, message);
+            }
+
+            return RedirectToAction(nameof(VerificationPhoneNumber));
         }
 
         [HttpGet]
@@ -632,9 +791,11 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
 
             var model = new IndexViewModel
             {
+                Id = user.Id.ToString(),
                 Username = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
+                IsPhoneNumberConfirmed = user.PhoneNumberConfirmed,
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage,
                 Name = profile.FullName,
@@ -644,7 +805,8 @@ namespace Skoruba.IdentityServer4.STS.Identity.Controllers
                 Region = profile.Region,
                 PostalCode = profile.PostalCode,
                 Locality = profile.Locality,
-                StreetAddress = profile.StreetAddress
+                StreetAddress = profile.StreetAddress,
+                AvatarOptions = _avatarOptions
             };
             return model;
         }

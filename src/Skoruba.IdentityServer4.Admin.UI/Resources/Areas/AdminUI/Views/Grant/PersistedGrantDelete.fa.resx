@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ButtonDeleteGrant" xml:space="preserve">
-    <value>حذف واگذاری اصرار شده</value>
+    <value>حذف دسترسی واگذار شده</value>
   </data>
   <data name="NavigationPersistedGrants" xml:space="preserve">
-    <value>واگذاری های اصرار شده</value>
+    <value>دسترسی های واگذار شده</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
-    <value>حذف واگذاری اصرار شده</value>
+    <value>حذف دسترسی های واگذار شده</value>
   </data>
   <data name="TableClient" xml:space="preserve">
     <value>کاربر</value>
@@ -136,7 +136,7 @@
     <value>انقضاء</value>
   </data>
   <data name="TableSubjectId" xml:space="preserve">
-    <value>Subject شناسه</value>
+    <value>شناسه کاربر</value>
   </data>
   <data name="TableType" xml:space="preserve">
     <value>نوع</value>

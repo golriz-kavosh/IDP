@@ -147,6 +147,9 @@
   <data name="SendVerificationEmail" xml:space="preserve">
     <value>Send verification email</value>
   </data>
+  <data name="SendVerificationPhoneNumber" xml:space="preserve">
+   <value>Send Verification Code</value>
+  </data>
   <data name="StreetAddress" xml:space="preserve">
     <value>Street address</value>
   </data>

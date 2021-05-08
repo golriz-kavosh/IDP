@@ -11,6 +11,7 @@ using Skoruba.IdentityServer4.STS.Identity.Configuration;
 using Skoruba.IdentityServer4.STS.Identity.Configuration.Constants;
 using Skoruba.IdentityServer4.STS.Identity.Configuration.Interfaces;
 using Skoruba.IdentityServer4.STS.Identity.Helpers;
+using Skoruba.IdentityServer4.STS.Identity.Services.SmsService;
 using System;
 using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
 
@@ -53,6 +54,10 @@ namespace Skoruba.IdentityServer4.STS.Identity
 
             // Add authorization policies for MVC
             RegisterAuthorization(services);
+
+            services.AddTransient<ISmsSender, SmsSender>();
+            services.Configure<SmsOptions>(Configuration.GetSection(nameof(SmsOptions)));
+            services.Configure<AvatarOptions>(Configuration.GetSection(nameof(AvatarOptions)));
 
             services.AddIdSHealthChecks<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminIdentityDbContext, IdentityServerDataProtectionDbContext>(Configuration);
         }

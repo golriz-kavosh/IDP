@@ -123,11 +123,15 @@
   <data name="AuthenticatorVerified" xml:space="preserve">
     <value>برنامه تایید هویت شما تایید شده است.</value>
   </data>
-   <data name="ConfirmEmailBody" xml:space="preserve">
+  <data name="ConfirmEmailBody" xml:space="preserve">
     <value>لطفا حساب خود را تایید کنید با &lt;a href='{0}'&gt;کلیک کردن اینجا&lt;/a&gt;.</value>
   </data>
   <data name="ConfirmEmailTitle" xml:space="preserve">
     <value>ایمیل خود را تایید کنید</value>
+  </data>
+  <data name="ConfirmPhoneNumberMessage" xml:space="preserve">
+    <value>Code: {0}
+کاوش</value>
   </data>
   <data name="DeletePersonalData" xml:space="preserve">
     <value>کاربر با شناسه '{0}' حذف شان کرده است.</value>
@@ -158,6 +162,9 @@
   </data>
   <data name="ErrorSettingPhone" xml:space="preserve">
     <value>خطای غیرمنتظره در تنظیم شماره تلفن برای کاربر با شناسه {0} رخ داده است.</value>
+  </data>
+  <data name="ExpirePhoneNumberTokenErrorMessage" xml:space="preserve">
+    <value>کد ارسالی منقضی شده است، لطفاً یک کد جدید دریافت کنید.</value>
   </data>
   <data name="ExternalLoginAdded" xml:space="preserve">
     <value>ورود خارجی اضافه شد.</value>
@@ -203,5 +210,8 @@
   </data>
   <data name="VerificationSent" xml:space="preserve">
     <value>ایمیل تایید ارسال شد. لطفا ایمیل خود را چک کنید.</value>
+  </data>
+  <data name="WrongPhoneNumberTokenErrorMessage" xml:space="preserve">
+    <value>کد ارسالی اشتباه است.</value>
   </data>
 </root>

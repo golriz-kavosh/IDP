@@ -10,8 +10,12 @@
 
 <div class="row">
     <div class="col-lg-2">
-        <img-gravatar email="@Model.Email" class="img-thumbnail" size="150" />
+        <a style="cursor: pointer" href="@Model.AvatarOptions.ClientUrl" target="_self">
+            <img-gravatar AvatarUrl="@Model.AvatarOptions.ServiceUrl" userId="@Model.Id" alt="Avatar"
+                          class="img-thumbnail" size="150" />
+        </a>
     </div>
+
     <div class="col-sm-10">
         <form method="post">
             <div class="form-group">
@@ -36,7 +40,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber">@Localizer["PhoneNumber"]</label>
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input type="hidden" asp-for="IsPhoneNumberConfirmed" />
+                @if (Model.IsPhoneNumberConfirmed || Model.PhoneNumber is null)
+                {
+                    <div class="input-group">
+                        <input asp-for="PhoneNumber" class="form-control" />
+                    </div>
+                }
+                else
+                {
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <button asp-action="SendVerificationPhoneNumber" class="btn btn-link">@Localizer["SendVerificationPhoneNumber"]</button>
+                }
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 

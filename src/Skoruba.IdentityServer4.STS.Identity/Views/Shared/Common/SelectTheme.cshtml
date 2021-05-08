@@ -6,7 +6,7 @@
 @inject IOptions<RequestLocalizationOptions> LocOptions
 @{
 
-    var themes = ThemeHelpers.GetThemes().Select(x=> new SelectListItem(){ Text = x, Value = x}).ToList();
+    var themes = ThemeHelpers.GetThemes().Select(x => new SelectListItem() { Text = x, Value = x }).ToList();
 
     var selectedTheme = string.IsNullOrEmpty(Context.Request.Cookies[ThemeHelpers.CookieThemeKey]) ? ThemeHelpers.DefaultTheme : Context.Request.Cookies[ThemeHelpers.CookieThemeKey];
 
@@ -19,7 +19,10 @@
               asp-action="SelectTheme" asp-route-returnUrl="@returnUrl"
               method="post" class="form-inline justify-content-end" role="form">
             <div class="form-group">
-                <label asp-for="@Context.Request.Cookies[ThemeHelpers.CookieThemeKey]" class="mr-2">@Localizer["Theme:"]</label>
+                <label asp-for="@Context.Request.Cookies[ThemeHelpers.CookieThemeKey]" class="mr-2"
+                       style="margin-left: .5rem !important;">
+                    @Localizer["Theme:"]
+                </label>
                 <select name="theme" onchange="this.form.submit();" class="form-control" asp-for="@selectedTheme" asp-items="themes"></select>
             </div>
         </form>

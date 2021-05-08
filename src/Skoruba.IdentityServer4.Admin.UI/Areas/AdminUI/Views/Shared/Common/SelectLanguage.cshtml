@@ -10,7 +10,9 @@
     var cultureItems = LocOptions.Value.SupportedUICultures
         .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
         .ToList();
-    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) 
+        ? "~/" 
+        : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
 }
 @if (cultureItems.Count > 1)
 {
@@ -19,8 +21,13 @@
               asp-action="SetLanguage" asp-area="@CommonConsts.AdminUIArea" asp-route-returnUrl="@returnUrl"
               method="post" class="form-inline justify-content-end" role="form">
             <div class="form-group">
-                <label asp-for="@requestCulture.RequestCulture.UICulture.Name" class="mr-2">@Localizer["Language:"]</label>
-                <select name="culture" onchange="this.form.submit();" class="form-control" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
+                <label asp-for="@requestCulture.RequestCulture.UICulture.Name"
+                       class="mr-2" style="margin-left: .5rem !important;">
+                    @Localizer["Language:"]
+                </label>
+                <select name="culture" onchange="this.form.submit();" class="form-control" 
+                        asp-for="@requestCulture.RequestCulture.UICulture.Name" 
+                        asp-items="cultureItems"></select>
             </div>
         </form>
     </div>

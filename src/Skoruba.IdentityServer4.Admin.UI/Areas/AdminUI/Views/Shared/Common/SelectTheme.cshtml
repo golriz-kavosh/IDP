@@ -20,7 +20,10 @@
               asp-action="SelectTheme" asp-area="@CommonConsts.AdminUIArea" asp-route-returnUrl="@returnUrl"
               method="post" class="form-inline justify-content-end" role="form">
             <div class="form-group">
-                <label asp-for="@Context.Request.Cookies[ThemeHelpers.CookieThemeKey]" class="mr-2">@Localizer["Theme:"]</label>
+                <label asp-for="@Context.Request.Cookies[ThemeHelpers.CookieThemeKey]" class="mr-2"
+                       class="mr-2" style="margin-left: .5rem !important;">
+                    @Localizer["Theme:"]
+                </label>
                 <select name="theme" onchange="this.form.submit();" class="form-control" asp-for="@selectedTheme" asp-items="themes"></select>
             </div>
         </form>
