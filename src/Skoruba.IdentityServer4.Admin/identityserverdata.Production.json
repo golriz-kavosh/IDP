@@ -59,6 +59,18 @@
         "UserClaims": [
           "address"
         ]
+      },
+      {
+        "Name": "relation",
+        "Enabled": true,
+        "DisplayName": "User relations",
+        "Description": "Your user relation to other apps.",
+	"Required": true,
+        "Emphasize": true,
+        "UserClaims": [
+          "person_id",
+          "employee_id"
+        ]
       }
     ],
     "ApiScopes": [
@@ -84,7 +96,7 @@
       {
         "ClientId": "idp_console",
         "ClientName": "idp_console",
-        "ClientUri": "https://localhost:44303",
+        "ClientUri": "http://10.10.1.34:8301",
         "AllowedGrantTypes": [
           "authorization_code"
         ],
@@ -95,14 +107,14 @@
           }
         ],
         "RedirectUris": [
-          "https://localhost:44303/signin-oidc"
+          "http://10.10.1.34:8301/signin-oidc"
         ],
-        "FrontChannelLogoutUri": "https://localhost:44303/signout-oidc",
+        "FrontChannelLogoutUri": "http://10.10.1.34:8301/signout-oidc",
         "PostLogoutRedirectUris": [
-          "https://localhost:44303/signout-callback-oidc"
+          "http://10.10.1.34:8301/signout-callback-oidc"
         ],
         "AllowedCorsOrigins": [
-          "https://localhost:44303"
+          "http://10.10.1.34:8301"
         ],
         "AllowedScopes": [
           "openid",
@@ -120,13 +132,13 @@
         "RequireClientSecret": false,
         "RequirePkce": true,
         "RedirectUris": [
-          "https://localhost:44302/swagger/oauth2-redirect.html"
+          "http://10.10.1.34:8100/swagger/oauth2-redirect.html"
         ],
         "AllowedScopes": [
           "idp_console_api"
         ],
         "AllowedCorsOrigins": [
-          "https://localhost:44302"
+          "http://10.10.1.34:8100"
         ]
       }
     ]

@@ -2,21 +2,21 @@
   "IdentityData": {
     "Roles": [
       {
-        "Name": "GodAdmin"
+        "Name": "Administrator"
       }
     ],
     "Users": [
       {
-        "Username": "admin",
-        "Password": "P@ssw0rd",
-        "Email": "hessam8008@yahoo.com",
+        "Username": "Administrator",
+        "Password": "P@ssw0rd2",
+        "Email": "Kavosh@golrizpaper.com",
         "Roles": [
-          "GodAdmin"
+          "Administrator"
         ],
         "Claims": [
           {
             "Type": "name",
-            "Value": "admin"
+            "Value": "administrator"
           }
         ]
       }

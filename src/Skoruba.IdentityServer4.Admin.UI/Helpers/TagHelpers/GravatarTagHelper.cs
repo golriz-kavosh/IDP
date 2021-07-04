@@ -41,7 +41,7 @@ namespace Skoruba.IdentityServer4.Admin.UI.Helpers.TagHelpers
         {
             var sizeArg = size > 0 ? $"?s={size}" : "";
 
-            return $"http://gravatar.dev.api/av/{key}{sizeArg}";
+            return $"http://10.10.1.34:8104/av/{key}{sizeArg}";
         }
     }
 }
