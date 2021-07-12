@@ -106,7 +106,8 @@ namespace Skoruba.IdentityServer4.Admin.EntityFramework.Repositories
                 .WhereIf(!string.IsNullOrEmpty(search), searchCondition);
 
             var apiScopes = await filteredApiScopes
-                .PageBy(x => x.Name, page, pageSize).ToListAsync();
+                .PageBy(x => x.Name, page, pageSize, false)
+                .ToListAsync();
 
             pagedList.Data.AddRange(apiScopes);
             pagedList.TotalCount = await filteredApiScopes.CountAsync();
@@ -121,7 +122,7 @@ namespace Skoruba.IdentityServer4.Admin.EntityFramework.Repositories
                 .WhereIf(!string.IsNullOrEmpty(scope), x => x.Name.Contains(scope))
                 .TakeIf(x => x.Id, limit > 0, limit)
                 .Select(x => x.Name).ToListAsync();
-            
+
             return apiScopes;
         }
 

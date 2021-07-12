@@ -17,6 +17,9 @@ namespace Skoruba.IdentityServer4.Admin.UI.Helpers.TagHelpers
         [HtmlAttributeName("size")]
         public int Size { get; set; }
 
+        [HtmlAttributeName("AvatarUrl")]
+        public string AvatarBaseUrl { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (!string.IsNullOrWhiteSpace(UserId))
@@ -32,16 +35,15 @@ namespace Skoruba.IdentityServer4.Admin.UI.Helpers.TagHelpers
                     output.Attributes.Add("alt", Alt);
                 }
 
-                output.Attributes.Add("src", GetAvatarUrl(UserId, Size));
+                output.Attributes.Add("src", GetAvatarUrl(AvatarBaseUrl, UserId, Size));
                 output.TagMode = TagMode.SelfClosing;
             }
         }
 
-        private static string GetAvatarUrl(string key, int size)
+        private static string GetAvatarUrl(string url, string key, int size)
         {
             var sizeArg = size > 0 ? $"?s={size}" : "";
-
-            return $"http://10.10.1.34:8104/av/{key}{sizeArg}";
+            return $"{url}/{key}{sizeArg}";
         }
     }
 }

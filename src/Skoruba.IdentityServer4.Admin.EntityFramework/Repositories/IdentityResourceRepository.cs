@@ -1,14 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using IdentityServer4.EntityFramework.Entities;
+﻿using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Enums;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Extensions;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Repositories.Interfaces;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Skoruba.IdentityServer4.Admin.EntityFramework.Repositories
 {
@@ -30,10 +30,15 @@ namespace Skoruba.IdentityServer4.Admin.EntityFramework.Repositories
 
             Expression<Func<IdentityResource, bool>> searchCondition = x => x.Name.Contains(search);
 
-            var identityResources = await DbContext.IdentityResources.WhereIf(!string.IsNullOrEmpty(search), searchCondition).PageBy(x => x.Name, page, pageSize).ToListAsync();
+            var identityResources = await DbContext.IdentityResources
+                .WhereIf(!string.IsNullOrEmpty(search), searchCondition)
+                .PageBy(x => x.Name, page, pageSize, false)
+                .ToListAsync();
 
             pagedList.Data.AddRange(identityResources);
-            pagedList.TotalCount = await DbContext.IdentityResources.WhereIf(!string.IsNullOrEmpty(search), searchCondition).CountAsync();
+            pagedList.TotalCount = await DbContext.IdentityResources
+                .WhereIf(!string.IsNullOrEmpty(search), searchCondition)
+                .CountAsync();
             pagedList.PageSize = pageSize;
 
             return pagedList;

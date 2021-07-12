@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +6,13 @@ using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Enums;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Extensions;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories
 {
@@ -134,7 +134,9 @@ namespace Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories
             var pagedList = new PagedList<TRole>();
 
             Expression<Func<TRole, bool>> searchCondition = x => x.Name.Contains(search);
-            var roles = await RoleManager.Roles.WhereIf(!string.IsNullOrEmpty(search), searchCondition).PageBy(x => x.Id, page, pageSize).ToListAsync();
+            var roles = await RoleManager.Roles.WhereIf(!string.IsNullOrEmpty(search), searchCondition)
+                .PageBy(x => x.Name, page, pageSize, false)
+                .ToListAsync();
 
             pagedList.Data.AddRange(roles);
             pagedList.TotalCount = await RoleManager.Roles.WhereIf(!string.IsNullOrEmpty(search), searchCondition).CountAsync();

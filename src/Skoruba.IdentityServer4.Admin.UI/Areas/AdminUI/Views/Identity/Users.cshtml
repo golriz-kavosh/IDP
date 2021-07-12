@@ -7,6 +7,9 @@
 @{
     ViewBag.Title = Localizer["Title"];
     Layout = "_Layout";
+    var gravatarUrl = "http://gravatar.dev.api/av";
+
+    //var gravatarUrl = "http://10.10.1.34:8104/av";
 }
 
 <div class="row">
@@ -50,7 +53,7 @@
                                 <a asp-area="@CommonConsts.AdminUIArea" class="btn btn-primary" asp-action="UserProfile" asp-route-id="@user.Id">@Localizer["ActionEditUser"]</a>
                             </td>
                             <td class="align-middle">
-                                <img-gravatar size="64" alt="@user.UserName" userId="@user.Id" class="gravatar-image img-thumbnail" />
+                                <img-gravatar AvatarUrl="@gravatarUrl" size="100" alt="@user.UserName" userId="@user.Id" class="gravatar-image img-thumbnail" />
                             </td>
                             <td class="align-middle">@user.Id</td>
                             <td class="align-middle">@user.UserName</td>

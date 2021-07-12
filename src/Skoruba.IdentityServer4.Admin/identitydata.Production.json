@@ -2,7 +2,7 @@
   "IdentityData": {
     "Roles": [
       {
-        "Name": "Administrator"
+        "Name": "IdpAdmin"
       }
     ],
     "Users": [
@@ -11,7 +11,7 @@
         "Password": "P@ssw0rd2",
         "Email": "Kavosh@golrizpaper.com",
         "Roles": [
-          "Administrator"
+          "IdpAdmin"
         ],
         "Claims": [
           {

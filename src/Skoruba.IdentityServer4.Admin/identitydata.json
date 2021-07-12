@@ -2,7 +2,7 @@
   "IdentityData": {
     "Roles": [
       {
-        "Name": "GodAdmin"
+        "Name": "IdpAdmin"
       }
     ],
     "Users": [
@@ -11,7 +11,7 @@
         "Password": "P@ssw0rd",
         "Email": "hessam8008@yahoo.com",
         "Roles": [
-          "GodAdmin"
+          "IdpAdmin"
         ],
         "Claims": [
           {
